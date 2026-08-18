@@ -1,566 +1,1192 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Dinesh Kumar — Full Stack Developer</title>
-<meta name="description" content="Dinesh Kumar — Full Stack Developer specializing in PHP, Laravel and Shopify." />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>document.documentElement.classList.add('js');</script>
-<style>
-  :root{
-    --bg:#14151A;
-    --bg-panel:#1B1D24;
-    --bg-panel-2:#22252E;
-    --border:#2E313B;
-    --text:#E9E7E1;
-    --text-dim:#8C8F9B;
-    --text-faint:#5D606B;
-    --amber:#E8A33D;
-    --violet:#8C7EF0;
-    --green:#52B788;
-    --coral:#E0705F;
-    --mono:'JetBrains Mono', ui-monospace, monospace;
-    --sans:'Inter', ui-sans-serif, system-ui, sans-serif;
-    --sidebar-w:236px;
-    --radius:6px;
-  }
-  *{ box-sizing:border-box; }
-  html{ scroll-behavior:smooth; }
-  .js .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
-  .js .reveal.show{ opacity:1; transform:translateY(0); }
-  .js .resp-line{ opacity:0; transform:translateY(6px); transition:opacity .35s ease, transform .35s ease; }
-  .js .resp-line.show{ opacity:1; transform:translateY(0); }
-  .js .stat-num{ opacity:1; }
-  .js .tl-line{ transform:scaleY(0); transition:transform 1.1s cubic-bezier(.2,.7,.2,1); }
-  .js .tl-line.show{ transform:scaleY(1); }
-  @media (prefers-reduced-motion: reduce){
-    html{ scroll-behavior:auto; }
-    *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
-    .js .reveal, .js .resp-line{ opacity:1 !important; transform:none !important; }
-    .js .tl-line{ transform:scaleY(1) !important; }
-  }
-
-  body{
-    margin:0; background:var(--bg); color:var(--text);
-    font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased;
-  }
-  a{ color:inherit; }
-  h1,h2,h3{ margin:0; }
-  p{ margin:0; }
-  ul{ margin:0; padding:0; list-style:none; }
-
-  ::selection{ background:var(--violet); color:#fff; }
-
-  /* focus */
-  a:focus-visible, button:focus-visible{ outline:2px solid var(--violet); outline-offset:3px; border-radius:2px; }
-
-  .layout{ display:flex; min-height:100vh; }
-
-  /* ---------- SIDEBAR (desktop) ---------- */
-  .sidebar{
-    width:var(--sidebar-w); flex-shrink:0;
-    border-right:1px solid var(--border);
-    position:sticky; top:0; height:100vh;
-    padding:28px 24px; display:flex; flex-direction:column; gap:34px;
-  }
-  .brand{ font-family:var(--mono); font-weight:700; font-size:0.95rem; }
-  .status-row{ display:flex; align-items:center; gap:8px; margin-top:8px; font-family:var(--mono); font-size:0.72rem; color:var(--green); }
-  .status-dot{ width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 0 0 rgba(82,183,136,.6); animation:pulse 2.2s infinite; }
-  @keyframes pulse{
-    0%{ box-shadow:0 0 0 0 rgba(82,183,136,.55); }
-    70%{ box-shadow:0 0 0 7px rgba(82,183,136,0); }
-    100%{ box-shadow:0 0 0 0 rgba(82,183,136,0); }
-  }
-
-  .endpoints{ display:flex; flex-direction:column; gap:4px; }
-  .endpoints-label{ font-family:var(--mono); font-size:0.66rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px; }
-  .endpoint{
-    display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:var(--radius);
-    text-decoration:none; font-family:var(--mono); font-size:0.8rem; color:var(--text-dim);
-    transition:background .15s ease, color .15s ease;
-  }
-  .endpoint:hover{ background:var(--bg-panel-2); color:var(--text); }
-  .endpoint.active{ background:var(--bg-panel-2); color:var(--text); }
-  .endpoint.active .method{ box-shadow:0 0 0 1px currentColor inset; }
-  .method{
-    font-size:0.62rem; font-weight:700; padding:2px 6px; border-radius:3px; letter-spacing:0.03em;
-  }
-  .method--get{ background:rgba(82,183,136,.14); color:var(--green); }
-  .method--post{ background:rgba(232,163,61,.16); color:var(--amber); }
-
-  .sidebar-foot{ margin-top:auto; font-family:var(--mono); font-size:0.7rem; color:var(--text-faint); }
-
-  /* mobile topbar (hidden on desktop) */
-  .topbar{ display:none; }
-
-  /* ---------- MAIN ---------- */
-  main{ flex:1; min-width:0; }
-  .wrap{ max-width:760px; margin:0 auto; padding:0 28px; }
-
-  /* ---------- HERO ---------- */
-  .hero{ padding:72px 0 52px; }
-  .terminal{
-    background:var(--bg-panel); border:1px solid var(--border); border-radius:10px;
-    overflow:hidden; box-shadow:0 30px 60px -30px rgba(0,0,0,.6);
-  }
-  .terminal-bar{
-    display:flex; align-items:center; gap:8px; padding:12px 16px;
-    border-bottom:1px solid var(--border); background:var(--bg-panel-2);
-  }
-  .term-dot{ width:10px; height:10px; border-radius:50%; }
-  .term-dot--r{ background:#E0705F; } .term-dot--y{ background:#E8A33D; } .term-dot--g{ background:#52B788; }
-  .terminal-title{ margin-left:8px; font-family:var(--mono); font-size:0.72rem; color:var(--text-faint); }
-  .terminal-body{ padding:24px 22px 28px; font-family:var(--mono); font-size:0.92rem; }
-  .term-line{ color:var(--text); margin-bottom:16px; }
-  .prompt{ color:var(--green); margin-right:8px; }
-  .cursor{ display:inline-block; color:var(--amber); animation:blink 1s steps(1) infinite; }
-  @keyframes blink{ 50%{ opacity:0; } }
-
-  .resp-line{ white-space:pre; }
-  .k{ color:var(--violet); } .s{ color:var(--green); } .p{ color:var(--text-dim); } .arr{ color:var(--amber); }
-
-  .hero-title{ font-size:clamp(2rem,5.4vw,2.9rem); font-weight:700; margin:28px 0 8px; letter-spacing:-0.01em; }
-  .hero-sub{ color:var(--text-dim); font-size:1.05rem; max-width:52ch; }
-
-  .stats-row{ display:flex; gap:34px; margin:34px 0 30px; flex-wrap:wrap; }
-  .stat{ font-family:var(--mono); }
-  .stat-num{ font-size:1.7rem; font-weight:700; color:var(--amber); }
-  .stat-label{ font-size:0.7rem; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.06em; margin-top:2px; }
-
-  .hero-cta{ display:flex; gap:12px; flex-wrap:wrap; }
-  .btn{
-    font-family:var(--mono); font-size:0.82rem; font-weight:600; text-decoration:none;
-    padding:12px 20px; border-radius:var(--radius); display:inline-flex; align-items:center; gap:10px;
-    border:1px solid var(--border); transition:transform .15s ease, border-color .15s ease, background .15s ease;
-  }
-  .btn--primary{ background:var(--bg-panel-2); color:var(--text); }
-  .btn--primary:hover{ border-color:var(--green); transform:translateY(-2px); }
-  .btn--ghost{ color:var(--text-dim); }
-  .btn--ghost:hover{ border-color:var(--amber); color:var(--text); transform:translateY(-2px); }
-
-  /* ---------- SECTIONS ---------- */
-  section{ padding:52px 0; border-top:1px solid var(--border); }
-  .req-line{ font-family:var(--mono); font-size:0.78rem; color:var(--text-dim); margin-bottom:6px; }
-  .req-line .method{ margin-right:8px; }
-  .sec-title{ font-size:1.5rem; font-weight:700; margin:6px 0 22px; }
-  .status-badge{
-    display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:0.72rem;
-    color:var(--green); background:rgba(82,183,136,.1); border:1px solid rgba(82,183,136,.3);
-    padding:5px 10px; border-radius:20px; margin-bottom:20px;
-  }
-
-  .panel{ background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius); padding:26px 24px; }
-  .panel p{ color:#C9C7C1; font-size:1rem; max-width:62ch; }
-  .schema-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
-  .schema-chip{
-    font-family:var(--mono); font-size:0.72rem; color:var(--text-dim);
-    border:1px solid var(--border); border-radius:4px; padding:6px 10px;
-  }
-  .schema-chip b{ color:var(--amber); font-weight:600; }
-
-  /* skills */
-  .sku-group{ margin-bottom:26px; }
-  .sku-group:last-child{ margin-bottom:0; }
-  .sku-group-title{ font-family:var(--mono); font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-faint); margin-bottom:10px; }
-  .chip-grid{ display:flex; flex-wrap:wrap; gap:9px; }
-  .chip{
-    font-family:var(--mono); font-size:0.8rem; padding:8px 13px; border-radius:20px;
-    border:1px solid var(--border); background:var(--bg-panel-2); color:var(--text);
-    transition:transform .15s ease, border-color .15s ease;
-  }
-  .chip:hover{ transform:translateY(-2px); }
-  .chip--backend{ border-color:rgba(140,126,240,.4); } .chip--backend::before{ content:"● "; color:var(--violet); }
-  .chip--commerce{ border-color:rgba(232,163,61,.4); } .chip--commerce::before{ content:"● "; color:var(--amber); }
-  .chip--frontend{ border-color:rgba(82,183,136,.4); } .chip--frontend::before{ content:"● "; color:var(--green); }
-  .chip--tools{ border-color:rgba(224,112,95,.4); } .chip--tools::before{ content:"● "; color:var(--coral); }
-
-  /* experience timeline */
-  .tl{ position:relative; padding-left:28px; }
-  .tl-line{
-    position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:var(--border);
-    transform-origin:top; background:linear-gradient(var(--green), var(--violet));
-  }
-  .tl-item{ position:relative; margin-bottom:38px; }
-  .tl-item:last-child{ margin-bottom:0; }
-  .tl-dot{
-    position:absolute; left:-28px; top:4px; width:12px; height:12px; border-radius:50%;
-    background:var(--bg); border:2px solid var(--green);
-  }
-  .tl-item:not(.tl-item--current) .tl-dot{ border-color:var(--text-faint); }
-  .tl-status{ font-family:var(--mono); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--green); margin-bottom:6px; }
-  .tl-item:not(.tl-item--current) .tl-status{ color:var(--text-faint); }
-  .tl-role{ font-size:1.1rem; font-weight:700; }
-  .tl-meta{ color:var(--text-dim); font-size:0.9rem; margin:2px 0 12px; }
-  .tl-bullets li{ position:relative; padding-left:18px; margin-bottom:7px; color:#C9C7C1; font-size:0.94rem; }
-  .tl-bullets li::before{ content:"›"; position:absolute; left:0; color:var(--amber); }
-
-  /* education */
-  .spec-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
-  .spec-card{ background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
-  .spec-card h3{ font-size:1rem; font-weight:700; margin-bottom:14px; }
-  .field-row{ display:flex; gap:8px; font-family:var(--mono); font-size:0.82rem; padding:6px 0; flex-wrap:wrap; }
-  .field-key{ color:var(--violet); }
-  .field-type{ color:var(--text-faint); }
-  .field-val{ color:var(--green); }
-
-  /* contact / footer */
-  footer{ padding:64px 0 40px; }
-  .footer-title{ font-size:clamp(1.5rem,4vw,2.2rem); font-weight:700; max-width:16ch; margin-bottom:10px; }
-  .footer-sub{ color:var(--text-dim); margin-bottom:28px; }
-  .footer-links{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:40px; }
-  .footer-links a{
-    font-family:var(--mono); font-size:0.82rem; text-decoration:none; color:var(--text);
-    border:1px solid var(--border); border-radius:var(--radius); padding:11px 16px;
-    display:inline-flex; align-items:center; gap:8px; transition:border-color .15s ease, transform .15s ease;
-  }
-  .footer-links a:hover{ border-color:var(--green); transform:translateY(-2px); }
-  .footer-fine{ font-family:var(--mono); font-size:0.72rem; color:var(--text-faint); }
-
-  @media (max-width:860px){
-    .sidebar{ display:none; }
-    .topbar{
-      display:flex; position:sticky; top:0; z-index:40; background:var(--bg);
-      border-bottom:1px solid var(--border); padding:12px 16px; align-items:center;
-      justify-content:space-between; gap:12px;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dinesh Kumar — Full Stack Developer</title>
+  <meta name="description" content="Dinesh Kumar — Full Stack Developer specializing in PHP, Laravel and Shopify." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+    :root {
+      --bg: #14151A;
+      --bg-panel: #1B1D24;
+      --bg-panel-2: #22252E;
+      --border: #2E313B;
+      --text: #E9E7E1;
+      --text-dim: #8C8F9B;
+      --text-faint: #5D606B;
+      --amber: #E8A33D;
+      --violet: #8C7EF0;
+      --green: #52B788;
+      --coral: #E0705F;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+      --sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      --sidebar-w: 236px;
+      --radius: 6px;
     }
-    .topbar-brand{ font-family:var(--mono); font-weight:700; font-size:0.85rem; display:flex; align-items:center; gap:8px; }
-    .topbar-nav{ display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; }
-    .topbar-nav::-webkit-scrollbar{ display:none; }
-    .topbar-nav a{
-      font-family:var(--mono); font-size:0.72rem; color:var(--text-dim); text-decoration:none;
-      white-space:nowrap; padding:6px 10px; border-radius:14px; border:1px solid var(--border);
+
+    * {
+      box-sizing: border-box;
     }
-    .topbar-nav a.active{ color:var(--text); border-color:var(--green); }
-    .wrap{ padding:0 20px; }
-    .hero{ padding:40px 0 36px; }
-    .stats-row{ gap:24px; }
-  }
-</style>
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .js .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .js .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .js .resp-line {
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity .35s ease, transform .35s ease;
+    }
+
+    .js .resp-line.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .js .stat-num {
+      opacity: 1;
+    }
+
+    .js .tl-line {
+      transform: scaleY(0);
+      transition: transform 1.1s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .js .tl-line.show {
+      transform: scaleY(1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      * {
+        animation-duration: .001ms !important;
+        transition-duration: .001ms !important;
+      }
+
+      .js .reveal,
+      .js .resp-line {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      .js .tl-line {
+        transform: scaleY(1) !important;
+      }
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    ::selection {
+      background: var(--violet);
+      color: #fff;
+    }
+
+    /* focus */
+    a:focus-visible,
+    button:focus-visible {
+      outline: 2px solid var(--violet);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ---------- SIDEBAR (desktop) ---------- */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 34px;
+    }
+
+    .brand {
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--green);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(82, 183, 136, .6);
+      animation: pulse 2.2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(82, 183, 136, .55);
+      }
+
+      70% {
+        box-shadow: 0 0 0 7px rgba(82, 183, 136, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(82, 183, 136, 0);
+      }
+    }
+
+    .endpoints {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .endpoints-label {
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 8px;
+    }
+
+    .endpoint {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 10px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      transition: background .15s ease, color .15s ease;
+    }
+
+    .endpoint:hover {
+      background: var(--bg-panel-2);
+      color: var(--text);
+    }
+
+    .endpoint.active {
+      background: var(--bg-panel-2);
+      color: var(--text);
+    }
+
+    .endpoint.active .method {
+      box-shadow: 0 0 0 1px currentColor inset;
+    }
+
+    .method {
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.03em;
+    }
+
+    .method--get {
+      background: rgba(82, 183, 136, .14);
+      color: var(--green);
+    }
+
+    .method--post {
+      background: rgba(232, 163, 61, .16);
+      color: var(--amber);
+    }
+
+    .sidebar-foot {
+      margin-top: auto;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-faint);
+    }
+
+    /* mobile topbar (hidden on desktop) */
+    .topbar {
+      display: none;
+    }
+
+    /* ---------- MAIN ---------- */
+    main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      padding: 72px 0 52px;
+    }
+
+    .terminal {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .6);
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-panel-2);
+    }
+
+    .term-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .term-dot--r {
+      background: #E0705F;
+    }
+
+    .term-dot--y {
+      background: #E8A33D;
+    }
+
+    .term-dot--g {
+      background: #52B788;
+    }
+
+    .terminal-title {
+      margin-left: 8px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-faint);
+    }
+
+    .terminal-body {
+      padding: 24px 22px 28px;
+      font-family: var(--mono);
+      font-size: 0.92rem;
+    }
+
+    .term-line {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .prompt {
+      color: var(--green);
+      margin-right: 8px;
+    }
+
+    .cursor {
+      display: inline-block;
+      color: var(--amber);
+      animation: blink 1s steps(1) infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .resp-line {
+      white-space: pre;
+    }
+
+    .k {
+      color: var(--violet);
+    }
+
+    .s {
+      color: var(--green);
+    }
+
+    .p {
+      color: var(--text-dim);
+    }
+
+    .arr {
+      color: var(--amber);
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 5.4vw, 2.9rem);
+      font-weight: 700;
+      margin: 28px 0 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-sub {
+      color: var(--text-dim);
+      font-size: 1.05rem;
+      max-width: 52ch;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 34px;
+      margin: 34px 0 30px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      font-family: var(--mono);
+    }
+
+    .stat-num {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--amber);
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 2px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border);
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    .btn--primary {
+      background: var(--bg-panel-2);
+      color: var(--text);
+    }
+
+    .btn--primary:hover {
+      border-color: var(--green);
+      transform: translateY(-2px);
+    }
+
+    .btn--ghost {
+      color: var(--text-dim);
+    }
+
+    .btn--ghost:hover {
+      border-color: var(--amber);
+      color: var(--text);
+      transform: translateY(-2px);
+    }
+
+    /* ---------- SECTIONS ---------- */
+    section {
+      padding: 52px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .req-line {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .req-line .method {
+      margin-right: 8px;
+    }
+
+    .sec-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 6px 0 22px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--green);
+      background: rgba(82, 183, 136, .1);
+      border: 1px solid rgba(82, 183, 136, .3);
+      padding: 5px 10px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px 24px;
+    }
+
+    .panel p {
+      color: #C9C7C1;
+      font-size: 1rem;
+      max-width: 62ch;
+    }
+
+    .schema-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .schema-chip {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 10px;
+    }
+
+    .schema-chip b {
+      color: var(--amber);
+      font-weight: 600;
+    }
+
+    /* skills */
+    .sku-group {
+      margin-bottom: 26px;
+    }
+
+    .sku-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .sku-group-title {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 10px;
+    }
+
+    .chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .chip {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      padding: 8px 13px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg-panel-2);
+      color: var(--text);
+      transition: transform .15s ease, border-color .15s ease;
+    }
+
+    .chip:hover {
+      transform: translateY(-2px);
+    }
+
+    .chip--backend {
+      border-color: rgba(140, 126, 240, .4);
+    }
+
+    .chip--backend::before {
+      content: "● ";
+      color: var(--violet);
+    }
+
+    .chip--commerce {
+      border-color: rgba(232, 163, 61, .4);
+    }
+
+    .chip--commerce::before {
+      content: "● ";
+      color: var(--amber);
+    }
+
+    .chip--frontend {
+      border-color: rgba(82, 183, 136, .4);
+    }
+
+    .chip--frontend::before {
+      content: "● ";
+      color: var(--green);
+    }
+
+    .chip--tools {
+      border-color: rgba(224, 112, 95, .4);
+    }
+
+    .chip--tools::before {
+      content: "● ";
+      color: var(--coral);
+    }
+
+    /* experience timeline */
+    .tl {
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .tl-line {
+      position: absolute;
+      left: 5px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: var(--border);
+      transform-origin: top;
+      background: linear-gradient(var(--green), var(--violet));
+    }
+
+    .tl-item {
+      position: relative;
+      margin-bottom: 38px;
+    }
+
+    .tl-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .tl-dot {
+      position: absolute;
+      left: -28px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--green);
+    }
+
+    .tl-item:not(.tl-item--current) .tl-dot {
+      border-color: var(--text-faint);
+    }
+
+    .tl-status {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+
+    .tl-item:not(.tl-item--current) .tl-status {
+      color: var(--text-faint);
+    }
+
+    .tl-role {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .tl-meta {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      margin: 2px 0 12px;
+    }
+
+    .tl-bullets li {
+      position: relative;
+      padding-left: 18px;
+      margin-bottom: 7px;
+      color: #C9C7C1;
+      font-size: 0.94rem;
+    }
+
+    .tl-bullets li::before {
+      content: "›";
+      position: absolute;
+      left: 0;
+      color: var(--amber);
+    }
+
+    /* education */
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .spec-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .spec-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      padding: 6px 0;
+      flex-wrap: wrap;
+    }
+
+    .field-key {
+      color: var(--violet);
+    }
+
+    .field-type {
+      color: var(--text-faint);
+    }
+
+    .field-val {
+      color: var(--green);
+    }
+
+    /* contact / footer */
+    footer {
+      padding: 64px 0 40px;
+    }
+
+    .footer-title {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      max-width: 16ch;
+      margin-bottom: 10px;
+    }
+
+    .footer-sub {
+      color: var(--text-dim);
+      margin-bottom: 28px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .footer-links a {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 11px 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color .15s ease, transform .15s ease;
+    }
+
+    .footer-links a:hover {
+      border-color: var(--green);
+      transform: translateY(-2px);
+    }
+
+    .footer-fine {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-faint);
+    }
+
+    @media (max-width:860px) {
+      .sidebar {
+        display: none;
+      }
+
+      .topbar {
+        display: flex;
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        padding: 12px 16px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .topbar-brand {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .topbar-nav {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .topbar-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .topbar-nav a {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--text-dim);
+        text-decoration: none;
+        white-space: nowrap;
+        padding: 6px 10px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+      }
+
+      .topbar-nav a.active {
+        color: var(--text);
+        border-color: var(--green);
+      }
+
+      .wrap {
+        padding: 0 20px;
+      }
+
+      .hero {
+        padding: 40px 0 36px;
+      }
+
+      .stats-row {
+        gap: 24px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="layout">
-  <aside class="sidebar" aria-label="Section navigation">
-    <div>
-      <p class="brand">dinesh.dev</p>
-      <div class="status-row"><span class="status-dot"></span> online — open to work</div>
+  <div class="layout">
+    <aside class="sidebar" aria-label="Section navigation">
+      <div>
+        <p class="brand">dinesh.dev</p>
+        <div class="status-row"><span class="status-dot"></span> online — open to work</div>
+      </div>
+      <nav class="endpoints">
+        <p class="endpoints-label">Endpoints</p>
+        <a class="endpoint" href="#summary" data-nav><span class="method method--get">GET</span> /summary</a>
+        <a class="endpoint" href="#skills" data-nav><span class="method method--get">GET</span> /skills</a>
+        <a class="endpoint" href="#experience" data-nav><span class="method method--get">GET</span> /experience</a>
+        <a class="endpoint" href="#education" data-nav><span class="method method--get">GET</span> /education</a>
+        <a class="endpoint" href="#contact" data-nav><span class="method method--post">POST</span> /contact</a>
+      </nav>
+      <p class="sidebar-foot">Sardarshahar, Rajasthan, IN</p>
+    </aside>
+
+    <div class="topbar">
+      <span class="topbar-brand"><span class="status-dot"></span>dinesh.dev</span>
+      <nav class="topbar-nav" aria-label="Section navigation">
+        <a href="#summary" data-nav>summary</a>
+        <a href="#skills" data-nav>skills</a>
+        <a href="#experience" data-nav>experience</a>
+        <a href="#education" data-nav>education</a>
+        <a href="#contact" data-nav>contact</a>
+      </nav>
     </div>
-    <nav class="endpoints">
-      <p class="endpoints-label">Endpoints</p>
-      <a class="endpoint" href="#summary" data-nav><span class="method method--get">GET</span> /summary</a>
-      <a class="endpoint" href="#skills" data-nav><span class="method method--get">GET</span> /skills</a>
-      <a class="endpoint" href="#experience" data-nav><span class="method method--get">GET</span> /experience</a>
-      <a class="endpoint" href="#education" data-nav><span class="method method--get">GET</span> /education</a>
-      <a class="endpoint" href="#contact" data-nav><span class="method method--post">POST</span> /contact</a>
-    </nav>
-    <p class="sidebar-foot">Sardarshahar, Rajasthan, IN</p>
-  </aside>
 
-  <div class="topbar">
-    <span class="topbar-brand"><span class="status-dot"></span>dinesh.dev</span>
-    <nav class="topbar-nav" aria-label="Section navigation">
-      <a href="#summary" data-nav>summary</a>
-      <a href="#skills" data-nav>skills</a>
-      <a href="#experience" data-nav>experience</a>
-      <a href="#education" data-nav>education</a>
-      <a href="#contact" data-nav>contact</a>
-    </nav>
-  </div>
-
-  <main>
-    <header class="hero">
-      <div class="wrap">
-        <div class="terminal">
-          <div class="terminal-bar">
-            <span class="term-dot term-dot--r"></span><span class="term-dot term-dot--y"></span><span class="term-dot term-dot--g"></span>
-            <span class="terminal-title">zsh — dinesh@portfolio</span>
+    <main>
+      <header class="hero">
+        <div class="wrap">
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span class="term-dot term-dot--r"></span><span class="term-dot term-dot--y"></span><span
+                class="term-dot term-dot--g"></span>
+              <span class="terminal-title">zsh — dinesh@portfolio</span>
+            </div>
+            <div class="terminal-body">
+              <div class="term-line"><span class="prompt">$</span><span id="typed-cmd"></span><span class="cursor"
+                  id="cmd-cursor">▍</span></div>
+              <div id="term-response">
+                <div class="resp-line p">{</div>
+                <div class="resp-line">&nbsp;&nbsp;<span class="k">"name"</span><span class="p">:</span> <span
+                    class="s">"Dinesh Kumar"</span><span class="p">,</span></div>
+                <div class="resp-line">&nbsp;&nbsp;<span class="k">"role"</span><span class="p">:</span> <span
+                    class="s">"Full Stack Developer"</span><span class="p">,</span></div>
+                <div class="resp-line">&nbsp;&nbsp;<span class="k">"stack"</span><span class="p">:</span> <span
+                    class="arr">["PHP", "Laravel", "Shopify"]</span><span class="p">,</span></div>
+                <div class="resp-line">&nbsp;&nbsp;<span class="k">"location"</span><span class="p">:</span> <span
+                    class="s">"Sardarshahar, Rajasthan, IN"</span><span class="p">,</span></div>
+                <div class="resp-line">&nbsp;&nbsp;<span class="k">"status"</span><span class="p">:</span> <span
+                    class="s">"available_for_hire"</span></div>
+                <div class="resp-line p">}</div>
+              </div>
+            </div>
           </div>
-          <div class="terminal-body">
-            <div class="term-line"><span class="prompt">$</span><span id="typed-cmd"></span><span class="cursor" id="cmd-cursor">▍</span></div>
-            <div id="term-response">
-              <div class="resp-line p">{</div>
-              <div class="resp-line">&nbsp;&nbsp;<span class="k">"name"</span><span class="p">:</span> <span class="s">"Dinesh Kumar"</span><span class="p">,</span></div>
-              <div class="resp-line">&nbsp;&nbsp;<span class="k">"role"</span><span class="p">:</span> <span class="s">"Full Stack Developer"</span><span class="p">,</span></div>
-              <div class="resp-line">&nbsp;&nbsp;<span class="k">"stack"</span><span class="p">:</span> <span class="arr">["PHP", "Laravel", "Shopify"]</span><span class="p">,</span></div>
-              <div class="resp-line">&nbsp;&nbsp;<span class="k">"location"</span><span class="p">:</span> <span class="s">"Sardarshahar, Rajasthan, IN"</span><span class="p">,</span></div>
-              <div class="resp-line">&nbsp;&nbsp;<span class="k">"status"</span><span class="p">:</span> <span class="s">"available_for_hire"</span></div>
-              <div class="resp-line p">}</div>
+
+          <h1 class="hero-title">Full Stack Developer,<br>built for eCommerce.</h1>
+          <p class="hero-sub">Two years shipping PHP, Laravel and Shopify applications — REST APIs, database tuning, and
+            storefronts that hold up at checkout.</p>
+
+          <div class="stats-row">
+            <div class="stat">
+              <div class="stat-num" data-count="2" data-suffix="+">0</div>
+              <div class="stat-label">Years Experience</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num" data-count="2" data-suffix="">0</div>
+              <div class="stat-label">Companies Shipped To</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num" data-count="10" data-suffix="+">0</div>
+              <div class="stat-label">Core Technologies</div>
+            </div>
+          </div>
+
+          <div class="hero-cta">
+            <a class="btn btn--primary" href="mailto:dineshbangrwa4@gmail.com"><span
+                class="method method--get">GET</span> in touch</a>
+            <a class="btn btn--ghost" href="tel:+917014658316"><span class="method method--post">CALL</span> +91 70146
+              58316</a>
+          </div>
+        </div>
+      </header>
+
+      <section id="summary">
+        <div class="wrap reveal">
+          <p class="req-line"><span class="method method--get">GET</span>/api/v1/summary</p>
+          <span class="status-badge">● 200 OK · 12ms</span>
+          <h2 class="sec-title">Summary</h2>
+          <div class="panel">
+            <p>Full stack developer with two years of hands-on experience building web and eCommerce applications in
+              PHP, Laravel, and Shopify. Comfortable across the stack — RESTful APIs and MySQL query tuning on the
+              backend, AJAX and jQuery-driven interfaces on the front. Specializes in Shopify store builds and theme
+              customization, and writes code meant to stay maintainable long after launch.</p>
+            <div class="schema-row">
+              <span class="schema-chip">type: <b>full_stack_developer</b></span>
+              <span class="schema-chip">experience: <b>2_years</b></span>
+              <span class="schema-chip">availability: <b>open</b></span>
             </div>
           </div>
         </div>
+      </section>
 
-        <h1 class="hero-title">Full Stack Developer,<br>built for eCommerce.</h1>
-        <p class="hero-sub">Two years shipping PHP, Laravel and Shopify applications — REST APIs, database tuning, and storefronts that hold up at checkout.</p>
+      <section id="skills">
+        <div class="wrap reveal">
+          <p class="req-line"><span class="method method--get">GET</span>/api/v1/skills</p>
+          <span class="status-badge">● 200 OK · 8ms</span>
+          <h2 class="sec-title">Skills</h2>
 
-        <div class="stats-row">
-          <div class="stat"><div class="stat-num" data-count="2" data-suffix="+">0</div><div class="stat-label">Years Experience</div></div>
-          <div class="stat"><div class="stat-num" data-count="2" data-suffix="">0</div><div class="stat-label">Companies Shipped To</div></div>
-          <div class="stat"><div class="stat-num" data-count="10" data-suffix="+">0</div><div class="stat-label">Core Technologies</div></div>
-        </div>
-
-        <div class="hero-cta">
-          <a class="btn btn--primary" href="mailto:dineshbangrwa4@gmail.com"><span class="method method--get">GET</span> in touch</a>
-          <a class="btn btn--ghost" href="tel:+917014658316"><span class="method method--post">CALL</span> +91 70146 58316</a>
-        </div>
-      </div>
-    </header>
-
-    <section id="summary">
-      <div class="wrap reveal">
-        <p class="req-line"><span class="method method--get">GET</span>/api/v1/summary</p>
-        <span class="status-badge">● 200 OK · 12ms</span>
-        <h2 class="sec-title">Summary</h2>
-        <div class="panel">
-          <p>Full stack developer with two years of hands-on experience building web and eCommerce applications in PHP, Laravel, and Shopify. Comfortable across the stack — RESTful APIs and MySQL query tuning on the backend, AJAX and jQuery-driven interfaces on the front. Specializes in Shopify store builds and theme customization, and writes code meant to stay maintainable long after launch.</p>
-          <div class="schema-row">
-            <span class="schema-chip">type: <b>full_stack_developer</b></span>
-            <span class="schema-chip">experience: <b>2_years</b></span>
-            <span class="schema-chip">availability: <b>open</b></span>
+          <div class="sku-group">
+            <p class="sku-group-title">Backend &amp; Frameworks</p>
+            <div class="chip-grid">
+              <span class="chip chip--backend">PHP</span>
+              <span class="chip chip--backend">Laravel</span>
+              <span class="chip chip--backend">REST APIs</span>
+              <span class="chip chip--backend">OOP</span>
+            </div>
+          </div>
+          <div class="sku-group">
+            <p class="sku-group-title">Commerce Platform</p>
+            <div class="chip-grid">
+              <span class="chip chip--commerce">Shopify Theme Dev</span>
+              <span class="chip chip--commerce">Shopify APIs</span>
+            </div>
+          </div>
+          <div class="sku-group">
+            <p class="sku-group-title">Frontend</p>
+            <div class="chip-grid">
+              <span class="chip chip--frontend">HTML5 / CSS3</span>
+              <span class="chip chip--frontend">JavaScript</span>
+              <span class="chip chip--frontend">jQuery</span>
+              <span class="chip chip--frontend">AJAX</span>
+            </div>
+          </div>
+          <div class="sku-group">
+            <p class="sku-group-title">Data &amp; Tools</p>
+            <div class="chip-grid">
+              <span class="chip chip--tools">MySQL</span>
+              <span class="chip chip--tools">Git / GitHub</span>
+              <span class="chip chip--tools">Problem Solving</span>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="skills">
-      <div class="wrap reveal">
-        <p class="req-line"><span class="method method--get">GET</span>/api/v1/skills</p>
-        <span class="status-badge">● 200 OK · 8ms</span>
-        <h2 class="sec-title">Skills</h2>
+      <section id="experience">
+        <div class="wrap reveal">
+          <p class="req-line"><span class="method method--get">GET</span>/api/v1/experience</p>
+          <span class="status-badge">● 200 OK · 15ms</span>
+          <h2 class="sec-title">Experience</h2>
 
-        <div class="sku-group">
-          <p class="sku-group-title">Backend &amp; Frameworks</p>
-          <div class="chip-grid">
-            <span class="chip chip--backend">PHP</span>
-            <span class="chip chip--backend">Laravel</span>
-            <span class="chip chip--backend">REST APIs</span>
-            <span class="chip chip--backend">OOP</span>
+          <div class="tl">
+            <div class="tl-line" id="tl-line"></div>
+
+            <div class="tl-item tl-item--current">
+              <span class="tl-dot"></span>
+              <p class="tl-status">In progress</p>
+              <h3 class="tl-role">Full Stack Developer</h3>
+              <p class="tl-meta">Axis Web Art Pvt. Ltd. · Mar 2025 – Present</p>
+              <ul class="tl-bullets">
+                <li>Built and maintained full stack web applications with PHP and Laravel.</li>
+                <li>Developed REST APIs connecting frontend and backend services.</li>
+                <li>Customized Shopify stores — themes, product management, collections, checkout flows.</li>
+                <li>Integrated Shopify APIs for variants, filters, discount coupons, and order management.</li>
+                <li>Handled user profiles and image uploads with Spatie Media Library.</li>
+                <li>Tuned MySQL queries for faster page loads and better database performance.</li>
+                <li>Worked in a Git-based team workflow — code reviews, daily standups.</li>
+              </ul>
+            </div>
+
+            <div class="tl-item">
+              <span class="tl-dot"></span>
+              <p class="tl-status">Completed</p>
+              <h3 class="tl-role">PHP &amp; Laravel Developer</h3>
+              <p class="tl-meta">KRC Infotech Solutions · 2024 – 2025</p>
+              <ul class="tl-bullets">
+                <li>Built REST APIs and AJAX-powered features, including cart and wishlist, for eCommerce apps.</li>
+                <li>Optimized SQL queries and integrated front-end interfaces.</li>
+                <li>Secured login and checkout systems; used Git for version control.</li>
+                <li>Joined daily standups and contributed across the full stack.</li>
+              </ul>
+            </div>
           </div>
         </div>
-        <div class="sku-group">
-          <p class="sku-group-title">Commerce Platform</p>
-          <div class="chip-grid">
-            <span class="chip chip--commerce">Shopify Theme Dev</span>
-            <span class="chip chip--commerce">Shopify APIs</span>
+      </section>
+
+      <section id="education">
+        <div class="wrap reveal">
+          <p class="req-line"><span class="method method--get">GET</span>/api/v1/education</p>
+          <span class="status-badge">● 200 OK · 6ms</span>
+          <h2 class="sec-title">Education</h2>
+
+          <div class="spec-grid">
+            <div class="spec-card">
+              <h3>Bachelor of Computer Applications</h3>
+              <div class="field-row"><span class="field-key">institution</span><span class="field-type">:string =</span>
+                <span class="field-val">"Maharaja Ganga Singh University, Rajasthan"</span></div>
+              <div class="field-row"><span class="field-key">duration</span><span class="field-type">:string =</span>
+                <span class="field-val">"2024 – Present"</span></div>
+              <div class="field-row"><span class="field-key">focus</span><span class="field-type">:string =</span> <span
+                  class="field-val">"Web Development, PHP, Backend"</span></div>
+            </div>
+            <div class="spec-card">
+              <h3>Senior Secondary</h3>
+              <div class="field-row"><span class="field-key">stream</span><span class="field-type">:string =</span>
+                <span class="field-val">"Agriculture"</span></div>
+              <div class="field-row"><span class="field-key">duration</span><span class="field-type">:string =</span>
+                <span class="field-val">"2023 – 2024"</span></div>
+              <div class="field-row"><span class="field-key">languages</span><span class="field-type">:array =</span>
+                <span class="field-val">["English", "Hindi"]</span></div>
+            </div>
           </div>
         </div>
-        <div class="sku-group">
-          <p class="sku-group-title">Frontend</p>
-          <div class="chip-grid">
-            <span class="chip chip--frontend">HTML5 / CSS3</span>
-            <span class="chip chip--frontend">JavaScript</span>
-            <span class="chip chip--frontend">jQuery</span>
-            <span class="chip chip--frontend">AJAX</span>
+      </section>
+
+      <footer id="contact">
+        <div class="wrap reveal">
+          <p class="req-line"><span class="method method--post">POST</span>/api/v1/contact</p>
+          <h2 class="footer-title">Ready to receive requests.</h2>
+          <p class="footer-sub">Open to full-time and freelance work — reach out directly.</p>
+          <div class="footer-links">
+            <a href="mailto:dineshbangrwa4@gmail.com">✉ dineshbangrwa4@gmail.com</a>
+            <a href="tel:+917014658316">☎ +91 70146 58316</a>
+            <a href="#summary">📍 Sardarshahar, Rajasthan, IN</a>
           </div>
+          <p class="footer-fine">© 2026 Dinesh Kumar. Response time: usually under 24h.</p>
         </div>
-        <div class="sku-group">
-          <p class="sku-group-title">Data &amp; Tools</p>
-          <div class="chip-grid">
-            <span class="chip chip--tools">MySQL</span>
-            <span class="chip chip--tools">Git / GitHub</span>
-            <span class="chip chip--tools">Problem Solving</span>
-          </div>
-        </div>
-      </div>
-    </section>
+      </footer>
+    </main>
+  </div>
 
-    <section id="experience">
-      <div class="wrap reveal">
-        <p class="req-line"><span class="method method--get">GET</span>/api/v1/experience</p>
-        <span class="status-badge">● 200 OK · 15ms</span>
-        <h2 class="sec-title">Experience</h2>
+  <script>
+    (function () {
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        <div class="tl">
-          <div class="tl-line" id="tl-line"></div>
+      /* ---- typewriter ---- */
+      var cmdText = 'curl https://dinesh.dev/api/v1/profile';
+      var cmdEl = document.getElementById('typed-cmd');
+      var respEl = document.getElementById('term-response');
+      var respLines = respEl ? respEl.querySelectorAll('.resp-line') : [];
 
-          <div class="tl-item tl-item--current">
-            <span class="tl-dot"></span>
-            <p class="tl-status">In progress</p>
-            <h3 class="tl-role">Full Stack Developer</h3>
-            <p class="tl-meta">Axis Web Art Pvt. Ltd. · Mar 2025 – Present</p>
-            <ul class="tl-bullets">
-              <li>Built and maintained full stack web applications with PHP and Laravel.</li>
-              <li>Developed REST APIs connecting frontend and backend services.</li>
-              <li>Customized Shopify stores — themes, product management, collections, checkout flows.</li>
-              <li>Integrated Shopify APIs for variants, filters, discount coupons, and order management.</li>
-              <li>Handled user profiles and image uploads with Spatie Media Library.</li>
-              <li>Tuned MySQL queries for faster page loads and better database performance.</li>
-              <li>Worked in a Git-based team workflow — code reviews, daily standups.</li>
-            </ul>
-          </div>
+      function revealResponse() {
+        respLines.forEach(function (line, i) {
+          setTimeout(function () { line.classList.add('show'); }, i * 70);
+        });
+      }
 
-          <div class="tl-item">
-            <span class="tl-dot"></span>
-            <p class="tl-status">Completed</p>
-            <h3 class="tl-role">PHP &amp; Laravel Developer</h3>
-            <p class="tl-meta">KRC Infotech Solutions · 2024 – 2025</p>
-            <ul class="tl-bullets">
-              <li>Built REST APIs and AJAX-powered features, including cart and wishlist, for eCommerce apps.</li>
-              <li>Optimized SQL queries and integrated front-end interfaces.</li>
-              <li>Secured login and checkout systems; used Git for version control.</li>
-              <li>Joined daily standups and contributed across the full stack.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="education">
-      <div class="wrap reveal">
-        <p class="req-line"><span class="method method--get">GET</span>/api/v1/education</p>
-        <span class="status-badge">● 200 OK · 6ms</span>
-        <h2 class="sec-title">Education</h2>
-
-        <div class="spec-grid">
-          <div class="spec-card">
-            <h3>Bachelor of Computer Applications</h3>
-            <div class="field-row"><span class="field-key">institution</span><span class="field-type">:string =</span> <span class="field-val">"Maharaja Ganga Singh University, Rajasthan"</span></div>
-            <div class="field-row"><span class="field-key">duration</span><span class="field-type">:string =</span> <span class="field-val">"2024 – Present"</span></div>
-            <div class="field-row"><span class="field-key">focus</span><span class="field-type">:string =</span> <span class="field-val">"Web Development, PHP, Backend"</span></div>
-          </div>
-          <div class="spec-card">
-            <h3>Senior Secondary</h3>
-            <div class="field-row"><span class="field-key">stream</span><span class="field-type">:string =</span> <span class="field-val">"Agriculture"</span></div>
-            <div class="field-row"><span class="field-key">duration</span><span class="field-type">:string =</span> <span class="field-val">"2023 – 2024"</span></div>
-            <div class="field-row"><span class="field-key">languages</span><span class="field-type">:array =</span> <span class="field-val">["English", "Hindi"]</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer id="contact">
-      <div class="wrap reveal">
-        <p class="req-line"><span class="method method--post">POST</span>/api/v1/contact</p>
-        <h2 class="footer-title">Ready to receive requests.</h2>
-        <p class="footer-sub">Open to full-time and freelance work — reach out directly.</p>
-        <div class="footer-links">
-          <a href="mailto:dineshbangrwa4@gmail.com">✉ dineshbangrwa4@gmail.com</a>
-          <a href="tel:+917014658316">☎ +91 70146 58316</a>
-          <a href="#summary">📍 Sardarshahar, Rajasthan, IN</a>
-        </div>
-        <p class="footer-fine">© 2026 Dinesh Kumar. Response time: usually under 24h.</p>
-      </div>
-    </footer>
-  </main>
-</div>
-
-<script>
-(function(){
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* ---- typewriter ---- */
-  var cmdText = 'curl https://dinesh.dev/api/v1/profile';
-  var cmdEl = document.getElementById('typed-cmd');
-  var respEl = document.getElementById('term-response');
-  var respLines = respEl ? respEl.querySelectorAll('.resp-line') : [];
-
-  function revealResponse(){
-    respLines.forEach(function(line, i){
-      setTimeout(function(){ line.classList.add('show'); }, i * 70);
-    });
-  }
-
-  if(reduceMotion || !cmdEl){
-    if(cmdEl) cmdEl.textContent = cmdText;
-    respLines.forEach(function(l){ l.classList.add('show'); });
-  } else {
-    var i = 0;
-    (function typeChar(){
-      if(i <= cmdText.length){
-        cmdEl.textContent = cmdText.slice(0, i);
-        i++;
-        setTimeout(typeChar, 32);
+      if (reduceMotion || !cmdEl) {
+        if (cmdEl) cmdEl.textContent = cmdText;
+        respLines.forEach(function (l) { l.classList.add('show'); });
       } else {
-        setTimeout(revealResponse, 250);
+        var i = 0;
+        (function typeChar() {
+          if (i <= cmdText.length) {
+            cmdEl.textContent = cmdText.slice(0, i);
+            i++;
+            setTimeout(typeChar, 32);
+          } else {
+            setTimeout(revealResponse, 250);
+          }
+        })();
+      }
+
+      /* ---- scroll reveal ---- */
+      var revealEls = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('show');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        revealEls.forEach(function (el) { io.observe(el); });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add('show'); });
+      }
+
+      /* ---- timeline draw ---- */
+      var tlLine = document.getElementById('tl-line');
+      if (tlLine && 'IntersectionObserver' in window) {
+        var tio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('show');
+              tio.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.2 });
+        tio.observe(tlLine);
+      } else if (tlLine) {
+        tlLine.classList.add('show');
+      }
+
+      /* ---- animated counters ---- */
+      var counters = document.querySelectorAll('.stat-num');
+      function animateCount(el) {
+        var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+        var suffix = el.getAttribute('data-suffix') || '';
+        if (reduceMotion) { el.textContent = target + suffix; return; }
+        var start = null, duration = 900;
+        function step(ts) {
+          if (!start) start = ts;
+          var progress = Math.min((ts - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(eased * target) + suffix;
+          if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+      if ('IntersectionObserver' in window) {
+        var cio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              animateCount(entry.target);
+              cio.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.5 });
+        counters.forEach(function (el) { cio.observe(el); });
+      } else {
+        counters.forEach(animateCount);
+      }
+
+      /* ---- scrollspy ---- */
+      var navLinks = document.querySelectorAll('[data-nav]');
+      var sections = Array.prototype.map.call(navLinks, function (a) {
+        return document.querySelector(a.getAttribute('href'));
+      }).filter(Boolean);
+
+      function setActive(id) {
+        navLinks.forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+      if ('IntersectionObserver' in window && sections.length) {
+        var sio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { setActive(entry.target.id); }
+          });
+        }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+        sections.forEach(function (s) { sio.observe(s); });
       }
     })();
-  }
-
-  /* ---- scroll reveal ---- */
-  var revealEls = document.querySelectorAll('.reveal');
-  if('IntersectionObserver' in window){
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          entry.target.classList.add('show');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    revealEls.forEach(function(el){ io.observe(el); });
-  } else {
-    revealEls.forEach(function(el){ el.classList.add('show'); });
-  }
-
-  /* ---- timeline draw ---- */
-  var tlLine = document.getElementById('tl-line');
-  if(tlLine && 'IntersectionObserver' in window){
-    var tio = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          entry.target.classList.add('show');
-          tio.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.2 });
-    tio.observe(tlLine);
-  } else if(tlLine){
-    tlLine.classList.add('show');
-  }
-
-  /* ---- animated counters ---- */
-  var counters = document.querySelectorAll('.stat-num');
-  function animateCount(el){
-    var target = parseInt(el.getAttribute('data-count'), 10) || 0;
-    var suffix = el.getAttribute('data-suffix') || '';
-    if(reduceMotion){ el.textContent = target + suffix; return; }
-    var start = null, duration = 900;
-    function step(ts){
-      if(!start) start = ts;
-      var progress = Math.min((ts - start) / duration, 1);
-      var eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(eased * target) + suffix;
-      if(progress < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-  if('IntersectionObserver' in window){
-    var cio = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          animateCount(entry.target);
-          cio.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
-    counters.forEach(function(el){ cio.observe(el); });
-  } else {
-    counters.forEach(animateCount);
-  }
-
-  /* ---- scrollspy ---- */
-  var navLinks = document.querySelectorAll('[data-nav]');
-  var sections = Array.prototype.map.call(navLinks, function(a){
-    return document.querySelector(a.getAttribute('href'));
-  }).filter(Boolean);
-
-  function setActive(id){
-    navLinks.forEach(function(a){
-      a.classList.toggle('active', a.getAttribute('href') === '#' + id);
-    });
-  }
-  if('IntersectionObserver' in window && sections.length){
-    var sio = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){ setActive(entry.target.id); }
-      });
-    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
-    sections.forEach(function(s){ sio.observe(s); });
-  }
-})();
-</script>
+  </script>
 
 </body>
+
 </html>
